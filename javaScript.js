@@ -1,208 +1,121 @@
-// window.name = "jawad";
+const signUpButton = document.getElementById("signUp");
+const signInButton = document.getElementById("signIn");
+const container = document.getElementById("container");
 
-// function stdName() {
-//   window.std1 = "amir";
+const mobileSignUp = document.getElementById("mobileSignUp");
+const mobileSignIn = document.getElementById("mobileSignIn");
 
-//   //   console.log(name);
-// }
+signUpButton.addEventListener("click", () => {
+  container.classList.add("right-panel-active");
+});
 
-// alert(window.std1);
-// // console.log(window.std1);
-// stdName();
+signInButton.addEventListener("click", () => {
+  container.classList.remove("right-panel-active");
+});
 
-// let x = 10;
-// x *= 2;
+mobileSignUp.addEventListener("click", () => {
+  container.classList.add("right-panel-active");
+});
 
-// console.log(x, "the value is: ", "");
+mobileSignIn.addEventListener("click", () => {
+  container.classList.remove("right-panel-active");
+});
 
-// const arr1 = [1, 2, 3, 45, 5];
+const signUpForm = document.getElementById("signUpForm");
+const signInForm = document.getElementById("signInForm");
 
-// for (let x in arr1) {
-//   console.log(arr1[x]);
-// }
+const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+const strongPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
 
-// if (true) {
-// } else {
-// }
+// ===== Helper functions =====
+function showError(input, message) {
+  removeError(input);
 
-// function functionName(name) {
-//   //   alert("hey, I am amir");
+  const error = document.createElement("small");
+  error.style.color = "red";
+  error.style.fontSize = "12px";
+  error.innerText = message;
 
-//   return name;
-// }
+  input.parentNode.insertBefore(error, input.nextSibling);
+}
 
-// console.log(functionName("jawad"));
+function removeError(input) {
+  const next = input.nextElementSibling;
+  if (next && next.tagName === "SMALL") {
+    next.remove();
+  }
+}
 
-// new Function("num1", "num2", "return num1 + num2");
+function clearErrors(form) {
+  form.querySelectorAll("small").forEach((e) => e.remove());
+}
 
-// emp = { id: 102, name: "Shyam Kumar", salary: 40000 };
+// ===== SIGN UP VALIDATION =====
+signUpForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  clearErrors(signUpForm);
 
-// document.write(emp.id + " " + emp.name + " " + emp.salary);
+  const inputs = signUpForm.querySelectorAll("input");
+  const name = inputs[0];
+  const email = inputs[1];
+  const password = inputs[2];
 
-// console.log(emp.id, emp.name, emp.salary);
+  let valid = true;
 
-// const name = new Object();
+  if (name.value.trim() === "") {
+    showError(name, "Name is required");
+    valid = false;
+  } else if (name.value.trim().length < 3) {
+    showError(name, "At least 3 characters");
+    valid = false;
+  }
 
-// name.id = 102;
-// name.std1 = "amir";
+  if (email.value.trim() === "") {
+    showError(email, "Email is required");
+    valid = false;
+  } else if (!emailPattern.test(email.value.trim())) {
+    showError(email, "Invalid email");
+    valid = false;
+  }
 
-// function objeName(id, name, salary) {
-//   this.id = id;
-//   this.name = name;
-//   this.salary = salary;
-// }
-// let today = new Date();
+  if (password.value.trim() === "") {
+    showError(password, "Password is required");
+    valid = false;
+  } else if (!strongPassword.test(password.value.trim())) {
+    showError(password, "Min 6 chars + A/a/0-9");
+    valid = false;
+  }
 
-// console.log(today.getSeconds());
+  if (valid) {
+    console.log("Sign Up Successful ✅");
+  }
+});
 
-// window.onload = function () {
-//   getTime();
-// };
+// ===== SIGN IN VALIDATION =====
+signInForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  clearErrors(signInForm);
 
-// function getTime() {
-//   let date = new Date();
+  const inputs = signInForm.querySelectorAll("input");
+  const email = inputs[0];
+  const password = inputs[1];
 
-//   let h = date.getHours();
-//   let m = date.getMinutes();
-//   let s = date.getSeconds();
+  let valid = true;
 
-//   m = checkTime(m);
-//   s = checkTime(s);
+  if (email.value.trim() === "") {
+    showError(email, "Email is required");
+    valid = false;
+  } else if (!emailPattern.test(email.value.trim())) {
+    showError(email, "Invalid email");
+    valid = false;
+  }
 
-//   console.log("Your Time zone is: ", h, ":", m, ":", s);
+  if (password.value.trim() === "") {
+    showError(password, "Password is required");
+    valid = false;
+  }
 
-//   setTimeout(() => {
-//     getTime();
-//   }, 1000);
-// }
-
-// function checkTime(i) {
-//   if (i < 10) {
-//     i = "0" + i;
-//   }
-//   return i;
-// }
-
-// window.alert("Hi, I am Student in the 6th semester of Software engineering.");
-// confirm("Do you want to do this?");
-
-// prompt("Please enter your name:");
-
-// setTimeout(() => {}, timeout);
-
-// open();
-// close();
-
-// let b = window.history.go();
-
-// console.log(b);
-
-// let x = window.screen.pixelDepth;
-
-// console.log(x);
-
-// document.write("hello ");
-
-// document.getElementById("h1");
-//  Polymorphism
-// class Animal {
-//   speak() {
-//     console.log("Animal is speaking");
-//   }
-// }
-// class Dog extends Animal {
-//   speak() {
-//     console.log("Dog is barking");
-//   }
-// }
-// const dog = new Dog();
-// dog.speak();
-
-// // Abstraction
-// class BankAccount {
-//   constructor(balance) {
-//     this.balance = balance;
-//   }
-
-//   deposit(amount) {
-//     this.balance += amount;
-//   }
-
-//   getBalance() {
-//     return this.balance;
-//   }
-// }
-// const account = new BankAccount(1000);
-// account.deposit(500);
-// console.log(account.getBalance());
-
-// let heading = document.getElementById("h3").value;
-// console.log(heading);
-
-// class Employee {
-//   constructor(id, name) {
-//     this.id = id;
-//     this.name = name;
-//   }
-
-//   details() {
-//     console.log("This is your id: ", this.id, "This is your name: ", this.name);
-//   }
-// }
-
-// let e1 = new Employee(100, "Ali");
-// let e2 = new Employee(101, "Sakhi");
-
-// e1.details();
-// e2.details();
-
-// let class1 = class {
-//   constructor(id, name) {
-//     this.id = id;
-//     this.name = name;
-//   }
-
-//   details() {
-//     console.log("This is your id: ", this.id, "This is your name: ", this.name);
-//   }
-// };
-
-// function Employee(firstName, lastName) {
-//   this.firstName = firstName;
-//   this.lastName = lastName;
-// }
-
-// Employee.prototype.fullName = function () {
-//   return this.firstName + this.lastName;
-// };
-
-// let e1 = new Employee("ali", "zafar");
-// let e2 = new Employee("Qasem", "Bashir");
-
-// console.log(e1.fullName());
-// console.log(e2.fullName());
-
-// parent class
-// class companyName {
-//   constructor() {
-//     this.company = "NTech";
-//   }
-// }
-
-// child class extends parent class
-// class Employee extends companyName {
-//   constructor(id, name) {
-//     super();
-
-//     this.id = id;
-//     this.name = name;
-//   }
-// }
-// let e1 = new Employee(1, "ali");
-
-// console.log(e1.company);
-
-// let p = document.getElementsByTagName("p");
-// p = "this some another text";
-
-// console.log(p);
+  if (valid) {
+    console.log("Sign In Successful ✅");
+  }
+});
