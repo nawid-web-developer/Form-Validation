@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Auth Form</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet" />
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      :root {
+        --primary-color: #4e73df;
+        --secondary-color: #224abe;
+        --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --text-dark: #333;
+        --text-light: #fff;
+        --transition-speed: 0.6s;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: #f4f7f6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .container {
+        background-color: #fff;
+        border-radius: 20px;
+        box-shadow:
+          0 14px 28px rgba(0, 0, 0, 0.25),
+          0 10px 10px rgba(0, 0, 0, 0.22);
+        position: relative;
+        overflow: hidden;
+        width: 850px;
+        max-width: 95%;
+        min-height: 550px;
+      }
+
+      .form-container {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all var(--transition-speed) ease-in-out;
+      }
+
+      /* Sign In & Sign Up shared styles */
+      form {
+        background-color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 50px;
+        height: 100%;
+        text-align: center;
+      }
+
+      h1 {
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--text-dark);
+      }
+
+      .social-container {
+        margin: 20px 0;
+      }
+
+      .social-container a {
+        border: 1px solid #ddd;
+        border-radius: 50%;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0 5px;
+        height: 40px;
+        width: 40px;
+        color: var(--text-dark);
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .social-container a:hover {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+      }
+
+      span {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+
+      input {
+        background-color: #eee;
+        border: none;
+        padding: 12px 15px;
+        margin: 8px 0;
+        width: 100%;
+        border-radius: 8px;
+        outline: none;
+        font-family: inherit;
+      }
+
+      button {
+        border-radius: 20px;
+        border: 1px solid var(--primary-color);
+        background-color: var(--primary-color);
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: bold;
+        padding: 12px 45px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: transform 80ms ease-in;
+        cursor: pointer;
+        margin-top: 15px;
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+
+      button:focus {
+        outline: none;
+      }
+
+      button.ghost {
+        background-color: transparent;
+        border-color: #ffffff;
+      }
+
+      /* Sign In Specific */
+      .sign-in-container {
+        left: 0;
+        width: 50%;
+        z-index: 2;
+      }
+
+      /* Sign Up Specific */
+      .sign-up-container {
+        left: 0;
+        width: 50%;
+        opacity: 0;
+        z-index: 1;
+      }
+
+      /* Animation Logic */
+      .container.right-panel-active .sign-in-container {
+        transform: translateX(100%);
+      }
+
+      .container.right-panel-active .sign-up-container {
+        transform: translateX(100%);
+        opacity: 1;
+        z-index: 5;
+        animation: show 0.6s;
+      }
+
+      @keyframes show {
+        0%,
+        49.99% {
+          opacity: 0;
+          z-index: 1;
+        }
+        50%,
+        100% {
+          opacity: 1;
+          z-index: 5;
+        }
+      }
+
+      /* Overlay Container */
+      .overlay-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: transform var(--transition-speed) ease-in-out;
+        z-index: 100;
+      }
+
+      .container.right-panel-active .overlay-container {
+        transform: translateX(-100%);
+      }
+
+      .overlay {
+        background: var(--bg-gradient);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 0 0;
+        color: #ffffff;
+        position: relative;
+        left: -100%;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: transform var(--transition-speed) ease-in-out;
+      }
+
+      .container.right-panel-active .overlay {
+        transform: translateX(50%);
+      }
+
+      .overlay-panel {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 40px;
+        text-align: center;
+        top: 0;
+        height: 100%;
+        width: 50%;
+        transform: translateX(0);
+        transition: transform var(--transition-speed) ease-in-out;
+      }
+
+      .overlay-left {
+        transform: translateX(-20%);
+      }
+
+      .container.right-panel-active .overlay-left {
+        transform: translateX(0);
+      }
+
+      .overlay-right {
+        right: 0;
+        transform: translateX(0);
+      }
+
+      .container.right-panel-active .overlay-right {
+        transform: translateX(20%);
+      }
+
+      .overlay p {
+        font-size: 14px;
+        font-weight: 300;
+        line-height: 20px;
+        letter-spacing: 0.5px;
+        margin: 20px 0 30px;
+      }
+
+      /* Mobile Responsive */
+      @media (max-width: 768px) {
+        .container {
+          min-height: 650px;
+          width: 90%;
+        }
+
+        .overlay-container {
+          display: none; /* Hide sliding overlay on small mobile */
+        }
+
+        .form-container {
+          width: 100%;
+        }
+
+        .sign-in-container {
+          z-index: 5;
+          opacity: 1;
+        }
+
+        .container.right-panel-active .sign-in-container {
+          opacity: 0;
+          z-index: 1;
+          transform: none;
+        }
+
+        .container.right-panel-active .sign-up-container {
+          transform: none;
+          width: 100%;
+        }
+
+        /* Mobile Toggle Button (Visible only on mobile) */
+        .mobile-toggle {
+          display: block;
+          margin-top: 20px;
+          color: var(--primary-color);
+          background: none;
+          border: none;
+          text-decoration: underline;
+          cursor: pointer;
+          font-size: 14px;
+        }
+      }
+
+      @media (min-width: 769px) {
+        .mobile-toggle {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="container">
+      <!-- Sign Up Form -->
+      <div class="form-container sign-up-container">
+        <form action="#" id="signUpForm">
+          <h1>Create Account</h1>
+          <div class="social-container">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-google-plus-g"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+          <span>or use your email for registration</span>
+          <input type="text" placeholder="Name" required />
+          <input type="email" placeholder="Email" required />
+          <input type="password" placeholder="Password" required />
+          <button type="submit">Sign Up</button>
+          <button type="button" class="mobile-toggle" id="mobileSignIn">
+            Already have an account? Sign In
+          </button>
+        </form>
+      </div>
+
+      <!-- Sign In Form -->
+      <div class="form-container sign-in-container">
+        <form action="#" id="signInForm">
+          <h1>Sign In</h1>
+          <div class="social-container">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-google-plus-g"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+          <span>or use your account</span>
+          <input type="email" placeholder="Email" required />
+          <input type="password" placeholder="Password" required />
+          <a
+            href="#"
+            style="
+              font-size: 12px;
+              color: #333;
+              text-decoration: none;
+              margin: 10px 0;
+            "
+            >Forgot your password?</a
+          >
+          <button type="submit">Sign In</button>
+          <button type="button" class="mobile-toggle" id="mobileSignUp">
+            Don't have an account? Sign Up
+          </button>
+        </form>
+      </div>
+
+      <!-- Overlay Panels -->
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Welcome Back!</h1>
+            <p>
+              To keep connected with us please login with your personal info
+            </p>
+            <button class="ghost" id="signIn">Sign In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Hello, Friend!</h1>
+            <p>Enter your personal details and start your journey with us</p>
+            <button class="ghost" id="signUp">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const signUpButton = document.getElementById("signUp");
+      const signInButton = document.getElementById("signIn");
+      const container = document.getElementById("container");
+
+      const mobileSignUp = document.getElementById("mobileSignUp");
+      const mobileSignIn = document.getElementById("mobileSignIn");
+
+      signUpButton.addEventListener("click", () => {
+        container.classList.add("right-panel-active");
+      });
+
+      signInButton.addEventListener("click", () => {
+        container.classList.remove("right-panel-active");
+      });
+
+      mobileSignUp.addEventListener("click", () => {
+        container.classList.add("right-panel-active");
+      });
+
+      mobileSignIn.addEventListener("click", () => {
+        container.classList.remove("right-panel-active");
+      });
+
+      const signUpForm = document.getElementById("signUpForm");
+      const signInForm = document.getElementById("signInForm");
+
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      const strongPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$/;
+
+      // ===== Helper functions =====
+      function showError(input, message) {
+        removeError(input);
+
+        const error = document.createElement("small");
+        error.style.color = "red";
+        error.style.fontSize = "12px";
+        error.innerText = message;
+
+        input.parentNode.insertBefore(error, input.nextSibling);
+      }
+
+      function removeError(input) {
+        const next = input.nextElementSibling;
+        if (next && next.tagName === "SMALL") {
+          next.remove();
+        }
+      }
+
+      function clearErrors(form) {
+        form.querySelectorAll("small").forEach((e) => e.remove());
+      }
+
+      // ===== SIGN UP VALIDATION =====
+      signUpForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        clearErrors(signUpForm);
+
+        const inputs = signUpForm.querySelectorAll("input");
+        const name = inputs[0];
+        const email = inputs[1];
+        const password = inputs[2];
+
+        let valid = true;
+
+        if (name.value.trim() === "") {
+          showError(name, "Name is required");
+          valid = false;
+        } else if (name.value.trim().length < 3) {
+          showError(name, "At least 3 characters");
+          valid = false;
+        }
+
+        if (email.value.trim() === "") {
+          showError(email, "Email is required");
+          valid = false;
+        } else if (!emailPattern.test(email.value.trim())) {
+          showError(email, "Invalid email");
+          valid = false;
+        }
+
+        if (password.value.trim() === "") {
+          showError(password, "Password is required");
+          valid = false;
+        } else if (!strongPassword.test(password.value.trim())) {
+          showError(password, "Min 6 chars + A/a/0-9");
+          valid = false;
+        }
+
+        if (valid) {
+          console.log("Sign Up Successful ✅");
+        }
+      });
+
+      // ===== SIGN IN VALIDATION =====
+      signInForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        clearErrors(signInForm);
+
+        const inputs = signInForm.querySelectorAll("input");
+        const email = inputs[0];
+        const password = inputs[1];
+
+        let valid = true;
+
+        if (email.value.trim() === "") {
+          showError(email, "Email is required");
+          valid = false;
+        } else if (!emailPattern.test(email.value.trim())) {
+          showError(email, "Invalid email");
+          valid = false;
+        }
+
+        if (password.value.trim() === "") {
+          showError(password, "Password is required");
+          valid = false;
+        }
+
+        if (valid) {
+          console.log("Sign In Successful ✅");
+        }
+      });
+    </script>
+  </body>
+</html>
